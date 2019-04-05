@@ -541,7 +541,8 @@ auto call_wrapper(Fun func, Args&&... args){
 	\begin{onlyenv}<3>
 	\centering production code example
 	\begin{minted}[autogobble=true]{c++}
-	[this](std::vector<std::unique_ptr<Element>>& container){/*...*/}
+	[this](std::vector<std::unique_ptr<Element>>&
+	                          container){/*...*/}
 	\end{minted}
 	
 	\end{onlyenv}
@@ -1287,14 +1288,16 @@ constexpr int operator[](int idx){
 	C++ 11:
 
 	\begin{minted}{c++}
-  EXPECT_EQ(std::bitset<8>(0xa7), ~std::bitset<8>{0x58});
+  EXPECT_EQ(std::bitset<8>(0xa7),
+           ~std::bitset<8>{0x58});
 	\end{minted}
 
 	\pause 
 	C++ 14:
 
 	\begin{minted}{c++}
-  EXPECT_EQ(std::bitset<8>(0b11100101), ~std::bitset<8>(0b01011000));
+  EXPECT_EQ(std::bitset<8>(0b11100101),
+           ~std::bitset<8>(0b01011000));
 	\end{minted}
 \end{frame}
 
@@ -1302,14 +1305,16 @@ constexpr int operator[](int idx){
 \begin{frame}[fragile]{How to make it even more readable?}
 \vfill
 \begin{minted}{c++}
-EXPECT_EQ(std::bitset<8>(0b11100101), ~std::bitset<8>(0b01011000));
+EXPECT_EQ(std::bitset<8>(0b11100101),
+         ~std::bitset<8>(0b01011000));
 \end{minted}
 \vfill
 \pause
 \hrule
 \vfill
 \begin{minted}{c++}
-EXPECT_EQ(std::bitset<8>(0b1110'0101), ~std::bitset<8>(0b0101'1000));
+EXPECT_EQ(std::bitset<8>(0b1110'0101),
+         ~std::bitset<8>(0b0101'1000));
 \end{minted}
 \vfill
 \end{frame}
@@ -1322,8 +1327,6 @@ W += 7000;
 
 	\pause 
 	\hrule
-	Now we can do better:
-
 	\begin{minted}{c++}
 // Note: be sure W is always positive so add 7000
 W += 7'000;	
