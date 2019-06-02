@@ -80,14 +80,14 @@
 					\hrule
 			\begin{itemize}
 				\item \alert{ud literals extended}
-				\item \alert{constexpr for STL}
-				\item \alert{std::quoted}
-				\item \alert{null forward iterators}
-				\item \alert{std::result\_of SFINAE-friendly}
-				\item \alert{std::shared\_timed\_mutex}
-				\item \alert{std::get<T>()}
+				\item constexpr for STL
+				\item std::quoted
+				\item null forward iterators
+				\item std::result\_of SFINAE-friendly
+				\item std::shared\_timed\_mutex
+				\item std::get<T>()
 				\item integral\_constant as a functor
-				\item std::index\_sequence
+				\item \alert{std::index\_sequence}
 				\item std::exchange
 				\item std::equal, std::is\_permutation, std::mismatch
 			\end{itemize}
@@ -131,12 +131,12 @@ auto sum(T a, T b){
 	\end{minted}
 		\end{column} \pause 
 		\begin{column}{0.48\linewidth}
-	\begin{minted}{c++}
+\begin{minted}{c++}
 template <typename T>
 decltype(auto) sum(T a, T b){
   return a + b;
 }	
-	\end{minted}	
+\end{minted}
 		\end{column}
 	
 	\end{columns}
@@ -158,7 +158,7 @@ struct A {
   auto f(); // forward declaration
 };
 auto A::f() { return 42; }
-		\end{minted}	
+\end{minted}
 	\end{onlyenv}
 	\begin{onlyenv}<2>
 	\begin{minted}{c++}
@@ -218,7 +218,7 @@ int global;
 auto foo() -> auto&{
   return global;
 }		
-		\end{minted}	
+\end{minted}
 	\end{onlyenv}
 
 	\begin{onlyenv}<6>
@@ -1150,7 +1150,7 @@ constexpr int fibonacci(int idx){
   }
   return prev;
 }
-	\end{minted}	
+\end{minted}
 	\end{onlyenv}
 
 	\begin{onlyenv}<4>
@@ -1161,7 +1161,7 @@ constexpr int foo(int& test){
   test++; //fine
   return test;
 }
-	\end{minted}	
+\end{minted}
 	\end{onlyenv}
 
 \end{frame}
@@ -1466,21 +1466,21 @@ struct Test{
 
 	\begin{columns}
 	\begin{column}{0.3\linewidth}
-	\begin{minted}{c++}	
+\begin{minted}{c++}
 Test test{1,2};
 // test.a == 1
 // test.b == 2
 	\end{minted}
 	\end{column} \pause
 	\begin{column}{0.3\linewidth}
-	\begin{minted}{c++}	
+\begin{minted}{c++}
 Test test1{1};
 // test1.a == 1
 // test1.b == 1	
 	\end{minted}
 	\end{column} \pause
 	\begin{column}{0.3\linewidth}
-	\begin{minted}{c++}	
+\begin{minted}{c++}
 Test test2{};
 // test2.a == 0
 // test2.b == 1
@@ -1683,244 +1683,6 @@ std::this_thread::sleep_for(100ms);
 
 \end{frame}
 
-\section{More constexprs}
-\begin{frame}{Constexpr all the things!}
-	\begin{itemize}[<+- |alert@+>]
-		\item std::initializer\_list
-		\item std::forward 
-		\item std::move
-		\item std::move\_if\_noexcept
-		\item std::pair
-		\item std::tuple
-		\item std::get
-	\end{itemize}
-\end{frame}
-
-\section{std::quoted}
-\begin{frame}[fragile]{std::quoted}
- \centering allows to conveniently read and write text to text stream
-
-\begin{onlyenv}<1>
- \begin{minted}[highlightlines={1-4}]{c++}
-std::stringstream ss;
-std::string in = 
-     "String with spaces, and embedded \"quotes\" too";
-std::string out;
- 
-ss << std::quoted(in);
-std::cout << "read in     [" << in << "]\n"
-          << "stored as   [" << ss.str() << "]\n";
- 
-ss >> std::quoted(out);
-std::cout << "written out [" << out << "]\n";
- \end{minted}
-\end{onlyenv}
-
-\begin{onlyenv}<2>
- \begin{minted}[highlightlines={6-8}]{c++}
-std::stringstream ss;
-std::string in = 
-     "String with spaces, and embedded \"quotes\" too";
-std::string out;
- 
-ss << std::quoted(in);
-std::cout << "read in     [" << in << "]\n"
-          << "stored as   [" << ss.str() << "]\n";
- 
-ss >> std::quoted(out);
-std::cout << "written out [" << out << "]\n";
- \end{minted}
-\end{onlyenv}
-
-\begin{onlyenv}<3>
- \begin{minted}[highlightlines={10-11}]{c++}
-std::stringstream ss;
-std::string in = 
-     "String with spaces, and embedded \"quotes\" too";
-std::string out;
- 
-ss << std::quoted(in);
-std::cout << "read in     [" << in << "]\n"
-          << "stored as   [" << ss.str() << "]\n";
- 
-ss >> std::quoted(out);
-std::cout << "written out [" << out << "]\n";
- \end{minted}
-\end{onlyenv}
-
-\begin{onlyenv}<2->
-\begin{block}{Output}
-	\only<2>{read in     [String with spaces, and embedded "quotes" too] \\
-stored as   ["String with spaces, and embedded \textbackslash"quotes\textbackslash" too"]}
-	\only<3>{written out [String with spaces, and embedded "quotes" too]}
-\end{block}
-\end{onlyenv}
-
-\end{frame}
-
-\section{Null forward iterators}
-\begin{frame}[fragile]{Null Iterators}
-\centering since C++14 we can write following code:
-\vfill
-\begin{onlyenv}<1>
-  \begin{minted}{c++}
-vector<int> v= {1,2,3};
-auto ni = vector<int>::iterator();
-auto nd = vector<double>::iterator();
-  \end{minted}
-\end{onlyenv}
-
-\begin{onlyenv}<2>
-  \begin{minted}[highlightlines={5}]{c++}
-vector<int> v= {1,2,3};
-auto ni = vector<int>::iterator();
-auto nd = vector<double>::iterator();
-
-ni == ni;// True.
-nd != nd;// False.
-v.begin() == ni;// Undefined behavior.
-v.end() == ni;// Undefined behavior. 
-ni == nd;// Won’t compile.  
-  \end{minted}
-\end{onlyenv}
-
-\begin{onlyenv}<3>
-  \begin{minted}[highlightlines={6}]{c++}
-vector<int> v= {1,2,3};
-auto ni = vector<int>::iterator();
-auto nd = vector<double>::iterator();
-
-ni == ni;// True.
-nd != nd;// False.
-v.begin() == ni;// Undefined behavior.
-v.end() == ni;// Undefined behavior. 
-ni == nd;// Won’t compile.  
-  \end{minted}
-\end{onlyenv}
-
-\begin{onlyenv}<4>
-  \begin{minted}[highlightlines={7}]{c++}
-vector<int> v= {1,2,3};
-auto ni = vector<int>::iterator();
-auto nd = vector<double>::iterator();
-
-ni == ni;// True.
-nd != nd;// False.
-v.begin() == ni;// Undefined behavior.
-v.end() == ni;// Undefined behavior. 
-ni == nd;// Won’t compile.  
-  \end{minted}
-\end{onlyenv}
-
-\begin{onlyenv}<5>
-  \begin{minted}[highlightlines={8}]{c++}
-vector<int> v= {1,2,3};
-auto ni = vector<int>::iterator();
-auto nd = vector<double>::iterator();
-
-ni == ni;// True.
-nd != nd;// False.
-v.begin() == ni;// Undefined behavior.
-v.end() == ni;// Undefined behavior. 
-ni == nd;// Won’t compile.  
-  \end{minted}
-\end{onlyenv}
-
-\begin{onlyenv}<6>
-  \begin{minted}[highlightlines={9}]{c++}
-vector<int> v= {1,2,3};
-auto ni = vector<int>::iterator();
-auto nd = vector<double>::iterator();
-
-ni == ni;// True.
-nd != nd;// False.
-v.begin() == ni;// Undefined behavior.
-v.end() == ni;// Undefined behavior. 
-ni == nd;// Won’t compile.  
-  \end{minted}
-\end{onlyenv}
-
-\end{frame}
-
-\section{std::shared\_timed\_mutex}
-\begin{frame}[fragile]{std::shared\_timed\_mutex}
-	\centering Since C++14 we have got a mutex which has shared ownership
-
-	\alert{multiple threads can lock} the lock, but it's also possible to \alert{uniquely} lock the mutex.
-
-\end{frame}
-
-\begin{frame}[fragile]{std::shared\_timed\_mutex}
-	how we can use the mutex:
-
-	\begin{minted}{c++}
-using namespace std;	
-using mutex = shared_timed_mutex;
-mutex mut;	
-	\end{minted}
-
-	\pause
-	\vfill
-
-	\begin{columns}
-	\begin{column}{0.48\linewidth}
-	\begin{minted}{c++}
-void reader(){
-  shared_lock<mutex> lck(mut);
-  //perform read  
-}
-	\end{minted}
-	\end{column}
-	\pause
-	\hfill
-	\begin{column}{0.48\linewidth}
-	\begin{minted}{c++}
-void updater(){
-  lock_guard<mutex> lck(mut);
-  //update
-}	
-	\end{minted}
-	\end{column}
-	
-	\end{columns}
-\end{frame}
-
-\section{std::get with types}
-\begin{frame}[fragile]{std::get}
-	Up to C++11 we could:
-
-	\begin{minted}{c++}
-std::pair<int, double> pair(1, 2);
-std::get<0>(pair);
-	\end{minted}
-
-\vfill
-\pause
-    Since C++ 14 we can:
-
-	\begin{minted}[highlightlines={3}]{c++}
-std::pair<int, double> pair(1, 2);
-std::get<0>(pair);
-std::get<double>(pair);
-	\end{minted}
-
-\end{frame}
-
-\section{result\_of SFINAE friendly}
-\begin{frame}[fragile]{std::result\_of}
-	\centering std::result\_of is now SFINAE friendly
-	\pause
-
-	But do not use it! It's deprecated since C++17 and \alert{removed in C++20}.\\
-	
-	\vfill
-
-	\begin{minted}{c++}
-decltype(std::declval<F>()(Args...))
-	\end{minted}
-	should be used instead.
-\end{frame}
-
 \begin{frame}{Thank you for your attention!}
 
 \vfill Bibliography:
@@ -1969,6 +1731,28 @@ decltype(std::declval<F>()(Args...))
 \end{column}
 
 \end{columns}
+\end{frame}
+
+\begin{frame}{Recommendations:}
+	\centerline{Bartłomiej Filipek}
+	\vfill
+	\begin{columns}
+		\begin{column}{0.48\linewidth}
+			\includegraphics[width=0.9\linewidth]{lambda.png}
+		\end{column} \pause
+		\begin{column}{0.48\linewidth}
+			\includegraphics[width=0.9\linewidth]{Cpp17.png}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Invitations:}
+	\begin{description}[<+->]
+		\item [My blog]  \href{blog.panicsoftware.com}{\alert{blog.panicsoftware.com}}
+		\item [Cpp Polska] \href{cpp-polska.pl/}{\alert{cpp-polska.pl}}
+		\item [Cpp Polska Slack] \href{cpppolska.slack.com}{\alert{cpppolska.slack.com}}
+		\item [Bartłomiej Filipek's blog] \href{www.bfilipek.com}{\alert{www.bfilipek.com}}
+	\end{description}
 \end{frame}
 
 \section{Questions?}
